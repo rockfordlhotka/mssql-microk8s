@@ -5,6 +5,9 @@ Top level steps:
 1. Install microk8s
 1. Enable the storage service in microk8s
 1. Enable the load balancer service in microk8s
+1. Read [Deploy a SQL Server container in Kubernetes](https://docs.microsoft.com/en-us/sql/linux/tutorial-sql-server-containers-kubernetes?view=sql-server-ver15)
+   1. Don't follow the instructions - just absorb the concepts
+   1. **Except:** do step 1 to _Create an SA password_: `kubectl create secret generic mssql --from-literal=SA_PASSWORD="MyC0m9l&xP@ssw0rd"`
 1. Read [SQL Server on Linux on Kubernetes](https://www.phillipsj.net/posts/sql-server-on-linux-on-kubernetes-part-1/), especially Part 2
    1. Don't follow the instructions in the blog - just absorb the concepts
 1. In this repo look at the `storage.yaml` file to see how I set up my storage volume and claim
