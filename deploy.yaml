@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql-deployment
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: mssql
+  template:
+    metadata:
+      labels:
+        app: mssql
+    spec:
+      terminationGracePeriodSeconds: 10
+      initContainers:
+      - name: volume-permissions
+        image: busybox
+        command: ["sh", "-c", "chown -R 10001:0 /var/opt/mssql"]
+        volumeMounts:
+        - mountPath: "/var/opt/mssql"
+          name: mssqldb
+      containers:
+      - name: mssql
+        image: mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
+        ports:
+        - containerPort: 1433
+        env:
+        - name: MSSQL_PID
+          value: "Developer"
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql
+              key: SA_PASSWORD 
+        volumeMounts:
+        - name: mssqldb
+          mountPath: /var/opt/mssql
+      volumes:
+      - name: mssqldb
+        persistentVolumeClaim:
+          claimName: mssql-data
+      nodeSelector:
+        kubernetes.io/hostname: acer01
+        kubernetes.io/arch: amd64
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql-deployment
+spec:
+  selector:
+    app: mssql
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: LoadBalancer
