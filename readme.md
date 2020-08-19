@@ -16,6 +16,8 @@ Top level steps:
 Notes:
 
 * I have a specific amd64 node called "acer01"; you will need to remove that restriction from the `deploy.yaml` file
-* You should leave the `kubernetes.io/arch` node selector so the pod _does_ run on an amd64 node (I have a mix of amd64 and arm64 nodes in my cluster)
+* You should leave the `kubernetes.io/arch` node selector so the pod _does_ run on an amd64 node
+  * I have a mix of amd64 and arm64 nodes in my cluster
+  * It is super frustrating when people don't put this node selector in their deploy files or helm charts!
 * The `containerinit` pod is temporary, and is necessary because mssql doesn't run as root, and it is necessary to set the file permissions in the persistent volume so the mssql user can use the file system
 
