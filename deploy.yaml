@@ -43,7 +43,6 @@ spec:
         persistentVolumeClaim:
           claimName: mssql-data
       nodeSelector:
-        kubernetes.io/hostname: acer01
         kubernetes.io/arch: amd64
 ---
 apiVersion: v1
